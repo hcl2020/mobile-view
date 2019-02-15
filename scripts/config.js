@@ -37,13 +37,13 @@ const builds = {
   },
 
   'cjs-prod': {
-    file: '.common.prod.js',
+    file: '.common.min.js',
     format: 'cjs',
     env: 'production'
   },
   // ES modules build (for bundlers)
   'esm-prod': {
-    file: '.esm.js',
+    file: '.esm.min.js',
     format: 'es'
   },
   // ES modules build (for direct import in browser)
