@@ -1,2 +1,2 @@
 # mobile-view
-A plugin for previewing mobile webpage on a large screen.
+A front-end tool for previewing mobile web page on a large screen.
