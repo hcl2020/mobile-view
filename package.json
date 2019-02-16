@@ -10,7 +10,7 @@
     "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:esm",
     "dev:esm-browser": "rollup -w -c scripts/config.js --environment TARGET:esm-browser",
     "dev:umd": "rollup -w -c scripts/config.js --environment TARGET:umd",
-    "serve": "browser-sync start --server --startPath \"example\" --files \"**/*.css, **/*.js, **/*.html\"",
+    "serve": "browser-sync start --config scripts/BS-config.js",
     "build": "node scripts/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
