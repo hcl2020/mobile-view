@@ -34,6 +34,8 @@
     "browser-sync": "^2.26.3",
     "rollup": "^1.1.2",
     "rollup-plugin-buble": "^0.19.6",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-replace": "^2.1.0",
     "terser": "^3.16.1"
   },

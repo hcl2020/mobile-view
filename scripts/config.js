@@ -1,6 +1,9 @@
 const path = require('path');
 const buble = require('rollup-plugin-buble');
 const replace = require('rollup-plugin-replace');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+
 const version = process.env.VERSION || require('../package.json').version;
 
 const banner =
@@ -95,7 +98,12 @@ function genConfig(name) {
   if (opts.transpile !== false) {
     config.plugins.push(buble());
   }
-
+  config.plugins.push(
+    resolve({
+      // browser: true
+    }),
+    commonjs()
+  );
   Object.defineProperty(config, '_name', {
     enumerable: false,
     value: name
