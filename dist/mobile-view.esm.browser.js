@@ -1,5 +1,5 @@
 /*!
- * MobileView(m-preview) v2.2.0
+ * MobileView(m-preview) v2.3.0
  * (c) 2017-2019 HeChanglin
  * Released under the MIT License.
  */
@@ -620,8 +620,8 @@ var QRCode;
 var qrcode = QRCode;
 
 let strStyle =
-  '#m-preview{padding-top:50px;text-align:center}#m-preview-mobile{background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}#m-preview-mobile iframe{width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}#m-preview-message{position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}#m-preview-message a{color:#666}' +
-  '#m-preview-qrcode{font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}';
+  '#mobile-view{padding-top:50px;text-align:center}#mobile-view-mobile{background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}#mobile-view-mobile iframe{width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}#mobile-view-message{position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}#mobile-view-message a{color:#666}' +
+  '#mobile-view-qrcode{font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}';
 
 let qrcode$1;
 
@@ -636,7 +636,7 @@ function makeQrCode(text) {
     qrcode$1.clear(); // clear the code.
     qrcode$1.makeCode(text); // make another code.
   } else {
-    qrcode$1 = new qrcode(document.getElementById('m-preview-qrcode-img'), {
+    qrcode$1 = new qrcode(document.getElementById('mobile-view-qrcode-img'), {
       text: text,
       width: 128,
       height: 128,
@@ -657,7 +657,7 @@ let defaultOpt = {
   threshold: 800 // maxWidth: 800
 };
 
-let mPreview = function mPreview(opt) {
+let MobileView = function MobileView(opt) {
   opt = opt || {};
   let message = opt.message || defaultOpt.message;
   let tips = opt.tips || defaultOpt.tips;
@@ -669,19 +669,19 @@ let mPreview = function mPreview(opt) {
   // document.write('<hr>')
 
   if (!isDOMContentLoaded()) {
-    setTimeout(mPreview, 25, opt);
+    setTimeout(MobileView, 25, opt);
     return true;
   }
 
   let pageUrl = location.href;
-  // let strTpl = '<div id="m-preview"><div id="m-preview-mobile"><p><mark></mark></p><iframe src="' +
+  // let strTpl = '<div id="mobile-view"><div id="mobile-view-mobile"><p><mark></mark></p><iframe src="' +
   let strTpl =
-    '<div id="m-preview"><div id="m-preview-mobile"><iframe src="' +
+    '<div id="mobile-view"><div id="mobile-view-mobile"><iframe src="' +
     pageUrl +
-    // '"></iframe><span></span></div><div id="m-preview-message">' +
-    '"></iframe></div><div id="m-preview-message">' +
+    // '"></iframe><span></span></div><div id="mobile-view-message">' +
+    '"></iframe></div><div id="mobile-view-message">' +
     message +
-    '</div><div id="m-preview-qrcode"><div id="m-preview-qrcode-img"></div><p>' +
+    '</div><div id="mobile-view-qrcode"><div id="mobile-view-qrcode-img"></div><p>' +
     tips +
     '</p></div></div><style>' +
     strStyle +
@@ -753,9 +753,9 @@ let mPreview = function mPreview(opt) {
   // window.onerror = function(e) {
   // console.log(e);
   // }
-  // throw new Error('mPreview');
+  // throw new Error('MobileView');
 
   return true;
 };
 
-export default mPreview;
+export default MobileView;
