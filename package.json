@@ -4,6 +4,7 @@
   "description": "A front-end tool for previewing mobile web page on a large screen.",
   "main": "dist/mobileView.common.js",
   "module": "dist/mobile-view.esm.js",
+  "typings": "types/index.d.ts",
   "scripts": {
     "dev": "start npm run serve && npm run dev:umd",
     "dev:cjs": "rollup -w -c scripts/config.js --environment TARGET:cjs",
