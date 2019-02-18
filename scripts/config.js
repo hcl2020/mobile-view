@@ -65,7 +65,7 @@ const builds = {
   }
 };
 
-const input = path.resolve(__dirname, '../src/index.js');
+const input = path.resolve(__dirname, '../src/index.ts');
 
 function genConfig(name) {
   const opts = builds[name];

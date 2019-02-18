@@ -36,7 +36,13 @@ let isDOMContentLoaded = function() {
   return !!document.body;
 };
 
-let MobileView = function MobileView(option = {}) {
+interface MobileViewOption {
+  tips?: string;
+  message?: string;
+  threshold?: number;
+}
+
+let MobileView = function MobileView(option: MobileViewOption = {}) {
   let {
     tips = '扫描二维码用手机查看~',
     message = '建议使用手机访问此页面',
