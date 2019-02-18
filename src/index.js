@@ -36,41 +36,36 @@ let isDOMContentLoaded = function() {
   return !!document.body;
 };
 
-let defaultOpt = {
-  message: '建议使用手机访问此页面',
-  tips: '扫描二维码用手机查看~',
-  threshold: 800 // maxWidth: 800
-};
+let MobileView = function MobileView(option = {}) {
+  let {
+    tips = '扫描二维码用手机查看~',
+    message = '建议使用手机访问此页面',
+    threshold = 800
+    // maxWidth = 800 981
+  } = option;
 
-let MobileView = function MobileView(opt) {
-  opt = opt || {};
-  let message = opt.message || defaultOpt.message;
-  let tips = opt.tips || defaultOpt.tips;
-  let threshold = opt.threshold || defaultOpt.threshold;
   if (window.innerWidth <= threshold || window.screen.width <= threshold) {
     return false;
   }
 
-  // document.write('<hr>')
-
   if (!isDOMContentLoaded()) {
-    setTimeout(MobileView, 25, opt);
+    setTimeout(MobileView, 25, option);
     return true;
   }
 
   let pageUrl = location.href;
-  // let strTpl = '<div id="mobile-view"><div id="mobile-view-mobile"><p><mark></mark></p><iframe src="' +
-  let strTpl =
-    '<div id="mobile-view"><div id="mobile-view-mobile"><iframe src="' +
-    pageUrl +
-    // '"></iframe><span></span></div><div id="mobile-view-message">' +
-    '"></iframe></div><div id="mobile-view-message">' +
-    message +
-    '</div><div id="mobile-view-qrcode"><div id="mobile-view-qrcode-img"></div><p>' +
-    tips +
-    '</p></div></div><style>' +
-    strStyle +
-    '</style>';
+  let strTpl = `
+<div id="mobile-view">
+  <div id="mobile-view-mobile">
+    <iframe src="${pageUrl}"></iframe>
+  </div>
+  <div id="mobile-view-message">${message}</div>
+  <div id="mobile-view-qrcode">
+    <div id="mobile-view-qrcode-img"></div>
+    <p>${tips}</p>
+  </div>
+</div>
+<style>${strStyle}</style>`;
 
   let $body = document.body;
   $body.innerHTML = strTpl;
@@ -78,43 +73,43 @@ let MobileView = function MobileView(opt) {
 
   let $iframe = document.getElementsByTagName('iframe')[0];
   $iframe.onload = function() {
-    let _window = $iframe.contentWindow;
+    let { contentWindow } = $iframe;
     /* 处理滚动条 */
     let strCss =
       '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
       '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
       '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
-    let $style = _window.document.createElement('style');
+    let $style = contentWindow.document.createElement('style');
     $style.innerHTML = strCss;
-    _window.document.head.appendChild($style);
+    contentWindow.document.head.appendChild($style);
     /* 处理地址栏 */
-    let pathname = _window.location.pathname;
+    let { pathname } = contentWindow.location;
 
-    makeQrCode(_window.location.href);
+    makeQrCode(contentWindow.location.href);
 
-    history.pushState(null, _window.document.title, pathname);
-    _window.addEventListener('hashchange', function(Event) {
-      window.location.hash = _window.location.hash;
+    history.pushState(null, contentWindow.document.title, pathname);
+    contentWindow.addEventListener('hashchange', function(Event) {
+      window.location.hash = contentWindow.location.hash;
     });
 
-    _window.addEventListener('popstate', function(Event) {
-      makeQrCode(_window.location.href);
+    contentWindow.addEventListener('popstate', function(Event) {
+      makeQrCode(contentWindow.location.href);
     });
 
-    let _replaceState = _window.history.replaceState;
+    let _replaceState = contentWindow.history.replaceState;
     if (_replaceState) {
-      _window.history.replaceState = function() {
-        _replaceState.apply(_window.history, arguments);
+      contentWindow.history.replaceState = function() {
+        _replaceState.apply(contentWindow.history, arguments);
         history.replaceState.apply(history, arguments);
-        makeQrCode(_window.location.href);
+        makeQrCode(contentWindow.location.href);
       };
     }
-    let _pushState = _window.history.pushState;
+    let _pushState = contentWindow.history.pushState;
     if (_pushState) {
-      _window.history.pushState = function() {
-        _pushState.apply(_window.history, arguments);
+      contentWindow.history.pushState = function() {
+        _pushState.apply(contentWindow.history, arguments);
         history.replaceState.apply(history, arguments);
-        makeQrCode(_window.location.href);
+        makeQrCode(contentWindow.location.href);
       };
     }
   };
