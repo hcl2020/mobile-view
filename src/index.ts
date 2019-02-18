@@ -46,8 +46,7 @@ let MobileView = function MobileView(option: MobileViewOption = {}) {
   let {
     tips = '扫描二维码用手机查看~',
     message = '建议使用手机访问此页面',
-    threshold = 800
-    // maxWidth = 800 981
+    threshold = 981
   } = option;
 
   if (window.innerWidth <= threshold || window.screen.width <= threshold) {
