@@ -45,7 +45,10 @@
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-replace": "^2.1.0",
-    "terser": "^3.16.1"
+    "rollup-plugin-typescript": "^1.0.0",
+    "terser": "^3.16.1",
+    "tslib": "^1.9.3",
+    "typescript": "^3.3.3"
   },
   "dependencies": {
     "qrcode_js": "^1.0.0"

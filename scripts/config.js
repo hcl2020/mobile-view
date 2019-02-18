@@ -3,6 +3,7 @@ const buble = require('rollup-plugin-buble');
 const replace = require('rollup-plugin-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
+const typescript = require('rollup-plugin-typescript');
 
 const version = process.env.VERSION || require('../package.json').version;
 
@@ -84,6 +85,8 @@ function genConfig(name) {
       }
     }
   };
+
+  config.plugins.push(typescript());
 
   // built-in vars
   const vars = {
