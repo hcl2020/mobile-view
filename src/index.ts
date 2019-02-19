@@ -8,6 +8,8 @@ let strStyle = `#mobile-view{padding-top:50px;text-align:center}
 // import QRCode from 'qrcode_js';
 import QRCode from './libs/qrcode';
 
+// TODO: 浏览器兼容
+
 let qrcode;
 
 function makeQrCode(text) {
@@ -32,9 +34,14 @@ function makeQrCode(text) {
   }
 }
 
-let isDOMContentLoaded = function() {
-  return !!document.body;
-};
+function stopLoadNextEl() {
+  try {
+    window.stop();
+  } catch (error) {
+    // For IE
+    document.execCommand('stop');
+  }
+}
 
 interface MobileViewOption {
   tips?: string;
@@ -55,16 +62,16 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     return false;
   }
 
-  if (!isDOMContentLoaded()) {
-    setTimeout(MobileView, 25, option);
-    return true;
+  let { userAgent = '' } = navigator;
+  if (!userAgent.match(/chrome/i) || userAgent.match(/edge/i)) {
+    // 暂时只支持Chrome浏览器
+    return false;
   }
 
-  let pageUrl = location.href;
-  let strTpl = `
+  let bodyTpl = `
 <div id="mobile-view">
   <div id="mobile-view-mobile">
-    <iframe src="${pageUrl}"></iframe>
+    <iframe src="${location.href}"></iframe>
   </div>
   <div id="mobile-view-message">${message}</div>
   <div id="mobile-view-qrcode">
@@ -74,10 +81,12 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
 </div>
 <style>${strStyle}</style>`;
 
-  let $body = document.body;
-  $body.innerHTML = strTpl;
+  // 停止网页解析和资源加载，构造body对象 (only Chrome)
+  stopLoadNextEl();
+  document.open();
+  document.close();
 
-  // 移除 head 中的各种
+  // 移除 head 中的各种 (For Chrome 36...)
   document.head.innerHTML = '';
 
   let $body = document.body;
