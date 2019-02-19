@@ -42,12 +42,8 @@ interface MobileViewOption {
   threshold?: number;
 }
 
-let MobileView = function MobileView(option: MobileViewOption = {}) {
-  let {
-    tips = '扫描二维码用手机查看~',
-    message = '建议使用手机访问此页面',
-    threshold = 981
-  } = option;
+let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
+  let { tips = '扫描二维码用手机查看~', message = '建议使用手机访问此页面', threshold = 981 } = option;
 
   if (window.innerWidth <= threshold || window.screen.width <= threshold) {
     return false;
@@ -74,6 +70,8 @@ let MobileView = function MobileView(option: MobileViewOption = {}) {
 
   let $body = document.body;
   $body.innerHTML = strTpl;
+
+  // 移除 head 中的各种
   document.head.innerHTML = '';
 
   let $iframe = document.getElementsByTagName('iframe')[0];
@@ -118,22 +116,6 @@ let MobileView = function MobileView(option: MobileViewOption = {}) {
       };
     }
   };
-
-  // 移除 head 中的 stylesheet
-  let $head = document.head;
-  let $heads = $head.children;
-  for (let i = 0; $heads[i]; ) {
-    if (
-      $heads[i]['type'] == 'text/css' ||
-      $heads[i]['rel'] == 'stylesheet' ||
-      $heads[i]['type'] == 'text/javascript' ||
-      $heads[i]['tagName'] == 'SCRIPT'
-    ) {
-      $head.removeChild($heads[i]);
-    } else {
-      i++;
-    }
-  }
 
   // window.onerror = function(e) {
   // console.log(e);
