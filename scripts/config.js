@@ -90,7 +90,7 @@ function genConfig(name) {
 
   // built-in vars
   const vars = {
-    __VERSION__: version
+    __VERSION__: `v${version}`
   };
   // build-specific env
   if (opts.env) {
