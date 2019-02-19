@@ -80,9 +80,18 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   // 移除 head 中的各种
   document.head.innerHTML = '';
 
-  let $iframe = document.getElementsByTagName('iframe')[0];
-  $iframe.onload = function() {
-    let { contentWindow } = $iframe;
+  let $body = document.body;
+  if ($body) {
+    $body.innerHTML = bodyTpl;
+  } else {
+    console.warn('no body');
+    document.open();
+    document.write(bodyTpl);
+    document.close();
+  }
+
+  function initIframe() {
+    let { contentWindow } = this;
     /* 处理滚动条 */
     let strCss =
       '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
@@ -121,8 +130,12 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
         makeQrCode(contentWindow.location.href);
       };
     }
-  };
+  }
 
+  let $iframe = document.getElementsByTagName('iframe')[0];
+  if ($iframe) {
+    $iframe.onload = initIframe;
+  }
 
   if (noThrowError) {
     return true;
