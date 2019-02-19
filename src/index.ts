@@ -40,10 +40,16 @@ interface MobileViewOption {
   tips?: string;
   message?: string;
   threshold?: number;
+  noThrowError?: boolean;
 }
 
 let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
-  let { tips = '扫描二维码用手机查看~', message = '建议使用手机访问此页面', threshold = 981 } = option;
+  let {
+    tips = '扫描二维码用手机查看~',
+    message = '建议使用手机访问此页面',
+    threshold = 981,
+    noThrowError = false
+  } = option;
 
   if (window.innerWidth <= threshold || window.screen.width <= threshold) {
     return false;
@@ -117,12 +123,18 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     }
   };
 
-  // window.onerror = function(e) {
-  // console.log(e);
-  // }
-  // throw new Error('MobileView');
 
-  return true;
+  if (noThrowError) {
+    return true;
+  } else {
+    let { onerror } = window;
+    window.onerror = function mv_onerror(message) {
+      console.log('MobileView: __VERSION__');
+      window.onerror = onerror;
+      return true;
+    };
+    throw new Error('MobileView：阻止后续代码执行');
+  }
 };
 
 export default MobileView;
