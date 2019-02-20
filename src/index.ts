@@ -12,11 +12,11 @@ import QRCode from './libs/qrcode';
 
 let qrcode;
 
-function makeQrCode(text) {
-  console.log('changeTo:', text);
+function changeQrCode(text) {
+  console.log('MobileView: QrCode', text);
   if (text.match(/^http(s)?:\/\//)) {
     text += text.match(/\?/) ? '&' : '?';
-    text += 'from=QrCode';
+    text += 'from=MobileView';
   }
 
   if (qrcode) {
@@ -110,35 +110,33 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     $style.innerHTML = strCss;
     contentWindow.document.head.appendChild($style);
     /* 处理地址栏 */
-    let { pathname } = contentWindow.location;
 
-    makeQrCode(contentWindow.location.href);
 
-    history.pushState(null, contentWindow.document.title, pathname);
-    contentWindow.addEventListener('hashchange', function(Event) {
-      window.location.hash = contentWindow.location.hash;
+    /* 处理地址栏 */
+    let _location = contentWindow.location;
+
+    contentWindow.addEventListener('hashchange', function(event) {
+      window.location.hash = _location.hash;
     });
 
-    contentWindow.addEventListener('popstate', function(Event) {
-      makeQrCode(contentWindow.location.href);
+    contentWindow.addEventListener('popstate', function(event) {
+      changeQrCode(_location.href);
     });
 
-    let _replaceState = contentWindow.history.replaceState;
-    if (_replaceState) {
-      contentWindow.history.replaceState = function() {
-        _replaceState.apply(contentWindow.history, arguments);
-        history.replaceState.apply(history, arguments);
-        makeQrCode(contentWindow.location.href);
-      };
-    }
-    let _pushState = contentWindow.history.pushState;
-    if (_pushState) {
-      contentWindow.history.pushState = function() {
-        _pushState.apply(contentWindow.history, arguments);
-        history.replaceState.apply(history, arguments);
-        makeQrCode(contentWindow.location.href);
-      };
-    }
+    changeQrCode(_location.href);
+    history.replaceState(null, contentWindow.document.title, _location.href);
+
+    let { replaceState, pushState } = contentWindow.history;
+    contentWindow.history.replaceState = function() {
+      replaceState.apply(this, arguments);
+      history.replaceState.apply(history, arguments);
+      changeQrCode(_location.href);
+    };
+    contentWindow.history.pushState = function() {
+      pushState.apply(this, arguments);
+      history.replaceState.apply(history, arguments);
+      changeQrCode(_location.href);
+    };
   }
 
   let $iframe = document.getElementsByTagName('iframe')[0];
