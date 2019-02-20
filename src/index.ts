@@ -100,52 +100,50 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   }
 
   function insertStyle(doc) {
-      /* 处理滚动条 */
-      let strCss =
-        '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
-        '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
-        '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
-      let $style = doc.createElement('style');
-      $style.innerHTML = strCss;
-      doc.head.appendChild($style);
+    /* 处理滚动条 */
+    let strCss =
+      '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
+      '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
+      '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
+    let $style = doc.createElement('style');
+    $style.innerHTML = strCss;
+    doc.head.appendChild($style);
   }
 
   function initIframe() {
     let { contentDocument, contentWindow } = this;
 
     if (contentDocument) {
+      insertStyle(contentDocument);
+      /* 处理地址栏 */
+      let _location = contentWindow.location;
 
-    insertStyle(contentDocument);
-    /* 处理地址栏 */
-    let _location = contentWindow.location;
-
-    history.replaceState(null, '', _location.href);
-    changeQrCode(_location.href);
-
-    let { replaceState, pushState } = contentWindow.history;
-    contentWindow.history.replaceState = function() {
-      replaceState.apply(this, arguments);
-      history.replaceState.apply(history, arguments);
+      history.replaceState(null, '', _location.href);
       changeQrCode(_location.href);
-    };
-    contentWindow.history.pushState = function() {
-      pushState.apply(this, arguments);
-      history.replaceState.apply(history, arguments);
-      changeQrCode(_location.href);
-    };
 
-    contentWindow.addEventListener('hashchange', function(event) {
-      window.location.hash = _location.hash;
-    });
+      let { replaceState, pushState } = contentWindow.history;
+      contentWindow.history.replaceState = function() {
+        replaceState.apply(this, arguments);
+        history.replaceState.apply(history, arguments);
+        changeQrCode(_location.href);
+      };
+      contentWindow.history.pushState = function() {
+        pushState.apply(this, arguments);
+        history.replaceState.apply(history, arguments);
+        changeQrCode(_location.href);
+      };
 
-    contentWindow.addEventListener('popstate', function(event) {
-      changeQrCode(_location.href);
-    });
-  } else {
-    // 跨域外部链接
-    // TODO: 获取外部链接，生成二维码，地址栏给出提示
-  }
+      contentWindow.addEventListener('hashchange', function(event) {
+        window.location.hash = _location.hash;
+      });
 
+      contentWindow.addEventListener('popstate', function(event) {
+        changeQrCode(_location.href);
+      });
+    } else {
+      // 跨域外部链接
+      // TODO: 获取外部链接，生成二维码，地址栏给出提示
+    }
   }
 
   let $iframe = document.getElementsByTagName('iframe')[0];
