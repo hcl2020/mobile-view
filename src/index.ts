@@ -34,6 +34,21 @@ function changeQrCode(text) {
   }
 }
 
+function syncTitle(contentDocument, document) {
+  let $title = contentDocument.getElementsByTagName('title')[0];
+  if ($title) {
+    new MutationObserver(records => {
+      records.forEach(record => {
+        document.title = contentDocument.title;
+      });
+    }).observe($title, {
+      subtree: true,
+      childList: true,
+      characterData: true
+    });
+  }
+}
+
 function stopLoadNextEl() {
   try {
     window.stop();
@@ -140,6 +155,9 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
       contentWindow.addEventListener('popstate', function(event) {
         changeQrCode(_location.href);
       });
+
+      document.title = contentDocument.title;
+      syncTitle(contentDocument, document);
     } else {
       // 跨域外部链接
       // TODO: 获取外部链接，生成二维码，地址栏给出提示
