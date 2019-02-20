@@ -99,18 +99,24 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     document.close();
   }
 
+  function insertStyle(contentWindow) {
+    let { document: doc } = contentWindow;
+    if (doc) {
+      /* 处理滚动条 */
+      let strCss =
+        '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
+        '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
+        '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
+      let $style = doc.createElement('style');
+      $style.innerHTML = strCss;
+      doc.head.appendChild($style);
+    }
+  }
+
   function initIframe() {
     let { contentWindow } = this;
-    /* 处理滚动条 */
-    let strCss =
-      '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
-      '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
-      '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
-    let $style = contentWindow.document.createElement('style');
-    $style.innerHTML = strCss;
-    contentWindow.document.head.appendChild($style);
-    /* 处理地址栏 */
 
+    insertStyle(contentWindow);
 
     /* 处理地址栏 */
     let _location = contentWindow.location;
