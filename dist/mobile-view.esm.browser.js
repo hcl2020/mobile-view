@@ -1,5 +1,5 @@
 /*!
- * MobileView(m-preview) v2.4.0
+ * MobileView(m-preview) v2.6.0
  * (c) 2017-2019 HeChanglin
  * Released under the MIT License.
  */
@@ -622,11 +622,11 @@ var qrcode = QRCode;
 var strStyle = "#mobile-view{padding-top:50px;text-align:center}\n#mobile-view-mobile{background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}\n#mobile-view-mobile iframe{width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}\n#mobile-view-message{position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}\n#mobile-view-message a{color:#666}\n#mobile-view-qrcode{font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}";
 // TODO: 浏览器兼容
 var qrcode$1;
-function makeQrCode(text) {
-    console.log('changeTo:', text);
+function changeQrCode(text) {
+    console.log('MobileView: QrCode', text);
     if (text.match(/^http(s)?:\/\//)) {
         text += text.match(/\?/) ? '&' : '?';
-        text += 'from=QrCode';
+        text += 'from=MobileView';
     }
     if (qrcode$1) {
         qrcode$1.clear(); // clear the code.
@@ -640,6 +640,20 @@ function makeQrCode(text) {
             colorDark: '#000000',
             colorLight: '#ffffff'
             // correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+}
+function syncTitle(contentDocument, document) {
+    var $title = contentDocument.getElementsByTagName('title')[0];
+    if ($title) {
+        new MutationObserver(function (records) {
+            records.forEach(function (record) {
+                document.title = contentDocument.title;
+            });
+        }).observe($title, {
+            subtree: true,
+            childList: true,
+            characterData: true
         });
     }
 }
@@ -680,40 +694,42 @@ var MobileView = function MobileView(option) {
         document.write(bodyTpl);
         document.close();
     }
-    function initIframe() {
-        var contentWindow = this.contentWindow;
+    function insertStyle(doc) {
         /* 处理滚动条 */
         var strCss = '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
             '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
             '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
-        var $style = contentWindow.document.createElement('style');
+        var $style = doc.createElement('style');
         $style.innerHTML = strCss;
-        contentWindow.document.head.appendChild($style);
-        /* 处理地址栏 */
-        var pathname = contentWindow.location.pathname;
-        makeQrCode(contentWindow.location.href);
-        history.pushState(null, contentWindow.document.title, pathname);
-        contentWindow.addEventListener('hashchange', function (Event) {
-            window.location.hash = contentWindow.location.hash;
-        });
-        contentWindow.addEventListener('popstate', function (Event) {
-            makeQrCode(contentWindow.location.href);
-        });
-        var _replaceState = contentWindow.history.replaceState;
-        if (_replaceState) {
+        doc.head.appendChild($style);
+    }
+    function initIframe() {
+        var _a = this, contentDocument = _a.contentDocument, contentWindow = _a.contentWindow;
+        if (contentDocument) {
+            insertStyle(contentDocument);
+            /* 处理地址栏 */
+            var _location_1 = contentWindow.location;
+            history.replaceState(null, '', _location_1.href);
+            changeQrCode(_location_1.href);
+            var _b = contentWindow.history, replaceState_1 = _b.replaceState, pushState_1 = _b.pushState;
             contentWindow.history.replaceState = function () {
-                _replaceState.apply(contentWindow.history, arguments);
+                replaceState_1.apply(this, arguments);
                 history.replaceState.apply(history, arguments);
-                makeQrCode(contentWindow.location.href);
+                changeQrCode(_location_1.href);
             };
-        }
-        var _pushState = contentWindow.history.pushState;
-        if (_pushState) {
             contentWindow.history.pushState = function () {
-                _pushState.apply(contentWindow.history, arguments);
+                pushState_1.apply(this, arguments);
                 history.replaceState.apply(history, arguments);
-                makeQrCode(contentWindow.location.href);
+                changeQrCode(_location_1.href);
             };
+            contentWindow.addEventListener('hashchange', function (event) {
+                window.location.hash = _location_1.hash;
+            });
+            contentWindow.addEventListener('popstate', function (event) {
+                changeQrCode(_location_1.href);
+            });
+            document.title = contentDocument.title;
+            syncTitle(contentDocument, document);
         }
     }
     var $iframe = document.getElementsByTagName('iframe')[0];
@@ -726,7 +742,7 @@ var MobileView = function MobileView(option) {
     else {
         var onerror_1 = window.onerror;
         window.onerror = function mv_onerror(message) {
-            console.log('MobileView: v2.4.0');
+            console.log('MobileView: v2.6.0');
             window.onerror = onerror_1;
             return true;
         };
