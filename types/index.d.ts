@@ -1,4 +1,4 @@
-declare function MobileView(config: {
+declare function MobileView(option?: {
   tips?: string;
   message?: string;
   threshold?: number;
