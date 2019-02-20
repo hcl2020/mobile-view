@@ -1,4 +1,9 @@
-declare function MobileView(config: { message?: string; tips?: string; threshold?: number }): boolean;
+declare function MobileView(config: {
+  tips?: string;
+  message?: string;
+  threshold?: number;
+  noThrowError?: boolean;
+}): boolean;
 
 export default MobileView;
 export as namespace MobileView;
