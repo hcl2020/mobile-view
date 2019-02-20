@@ -99,9 +99,7 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     document.close();
   }
 
-  function insertStyle(contentWindow) {
-    let { document: doc } = contentWindow;
-    if (doc) {
+  function insertStyle(doc) {
       /* 处理滚动条 */
       let strCss =
         '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
@@ -110,27 +108,19 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
       let $style = doc.createElement('style');
       $style.innerHTML = strCss;
       doc.head.appendChild($style);
-    }
   }
 
   function initIframe() {
-    let { contentWindow } = this;
+    let { contentDocument, contentWindow } = this;
 
-    insertStyle(contentWindow);
+    if (contentDocument) {
 
+    insertStyle(contentDocument);
     /* 处理地址栏 */
     let _location = contentWindow.location;
 
-    contentWindow.addEventListener('hashchange', function(event) {
-      window.location.hash = _location.hash;
-    });
-
-    contentWindow.addEventListener('popstate', function(event) {
-      changeQrCode(_location.href);
-    });
-
+    history.replaceState(null, '', _location.href);
     changeQrCode(_location.href);
-    history.replaceState(null, contentWindow.document.title, _location.href);
 
     let { replaceState, pushState } = contentWindow.history;
     contentWindow.history.replaceState = function() {
@@ -143,6 +133,19 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
       history.replaceState.apply(history, arguments);
       changeQrCode(_location.href);
     };
+
+    contentWindow.addEventListener('hashchange', function(event) {
+      window.location.hash = _location.hash;
+    });
+
+    contentWindow.addEventListener('popstate', function(event) {
+      changeQrCode(_location.href);
+    });
+  } else {
+    // 跨域外部链接
+    // TODO: 获取外部链接，生成二维码，地址栏给出提示
+  }
+
   }
 
   let $iframe = document.getElementsByTagName('iframe')[0];
