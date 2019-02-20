@@ -65,6 +65,35 @@ interface MobileViewOption {
   noThrowError?: boolean;
 }
 
+class MV{
+  qrcode = null;
+  $ifranem = null;
+
+  constructor(){
+
+  }
+
+  private isNeedEnable(){
+
+  }
+
+  private render(){
+
+  }
+
+  private syncUrl(){
+
+  }
+
+  private syncQRCode(){
+
+  }
+
+  private syncTitle(){
+
+  }
+}
+
 let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   let {
     tips = '扫描二维码用手机查看~',
