@@ -1,9 +1,10 @@
-let strStyle = `#mobile-view{padding-top:50px;text-align:center}
-#mobile-view-mobile{background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}
-#mobile-view-mobile iframe{width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}
-#mobile-view-message{position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}
-#mobile-view-message a{color:#666}
-#mobile-view-qrcode{font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}`;
+let strStyle = `
+#mobile-view {padding-top:50px;text-align:center}
+#mobile-view-mobile {background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}
+#mobile-view-mobile iframe {width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}
+#mobile-view-message {position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}
+#mobile-view-message a {color:#666}
+#mobile-view-qrcode {font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}`;
 
 // import QRCode from 'qrcode_js';
 import QRCode from './libs/qrcode';
@@ -77,12 +78,6 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     return false;
   }
 
-  let { userAgent = '' } = navigator;
-  if (!userAgent.match(/chrome/i) || userAgent.match(/edge/i)) {
-    // 暂时只支持Chrome浏览器
-    return false;
-  }
-
   let bodyTpl = `
 <div id="mobile-view">
   <div id="mobile-view-mobile">
@@ -105,14 +100,11 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   document.head.innerHTML = '';
 
   let $body = document.body;
-  if ($body) {
-    $body.innerHTML = bodyTpl;
-  } else {
-    console.warn('no body');
-    document.open();
-    document.write(bodyTpl);
-    document.close();
+  if (!$body) {
+    $body = document.createElement('body');
+    document.getElementsByTagName('html')[0].append($body);
   }
+  $body.innerHTML = bodyTpl;
 
   function insertStyle(doc) {
     /* 处理滚动条 */
