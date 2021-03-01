@@ -137,22 +137,22 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
       changeQrCode(_location.href);
 
       let { replaceState, pushState } = contentWindow.history;
-      contentWindow.history.replaceState = function() {
+      contentWindow.history.replaceState = function () {
         replaceState.apply(this, arguments);
         history.replaceState.apply(history, arguments);
         changeQrCode(_location.href);
       };
-      contentWindow.history.pushState = function() {
+      contentWindow.history.pushState = function () {
         pushState.apply(this, arguments);
         history.replaceState.apply(history, arguments);
         changeQrCode(_location.href);
       };
 
-      contentWindow.addEventListener('hashchange', function(event) {
+      contentWindow.addEventListener('hashchange', function (event) {
         window.location.hash = _location.hash;
       });
 
-      contentWindow.addEventListener('popstate', function(event) {
+      contentWindow.addEventListener('popstate', function (event) {
         changeQrCode(_location.href);
       });
 
