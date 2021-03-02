@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const buble = require('rollup-plugin-buble');
 const replace = require('rollup-plugin-replace');
@@ -5,7 +6,10 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const typescript = require('rollup-plugin-typescript');
 
+const input = path.resolve(__dirname, '../src/index.ts');
 const version = process.env.VERSION || require('../package.json').version;
+const getCssContent = () =>
+  fs.readFileSync(path.resolve(__dirname, '../src/index.css')).toString().replace(/\n|\r/g, '').replace(/  /g, ' ');
 
 const banner =
   '/*!\n' +
@@ -65,52 +69,48 @@ const builds = {
   }
 };
 
-const input = path.resolve(__dirname, '../src/index.ts');
-
 function genConfig(name) {
   const opts = builds[name];
-  const { plugins = [], file, format } = opts;
-  const config = {
-    input,
-    plugins,
-    output: {
-      file: path.resolve(__dirname, '../dist/', 'mobile-view' + file),
-      format,
-      banner,
-      name: 'MobileView'
-    },
-    onwarn: (msg, warn) => {
-      if (!/Circular/.test(msg)) {
-        warn(msg);
+  const { plugins = [], format } = opts;
+
+  plugins.push(
+    typescript(),
+    replace({
+      'process.env.NODE_ENV': opts.env && JSON.stringify(opts.env),
+      __VERSION__: `v${version}`
+    }),
+
+    {
+      name: 'loadCss',
+      transform(code, id) {
+        code = code.replace('__CSS_CONTENT__', getCssContent());
+        return { code };
       }
     }
-  };
-
-  config.plugins.push(typescript());
-
-  // built-in vars
-  const vars = {
-    __VERSION__: `v${version}`
-  };
-  // build-specific env
-  if (opts.env) {
-    vars['process.env.NODE_ENV'] = JSON.stringify(opts.env);
-  }
-  config.plugins.push(replace(vars));
+  );
 
   if (opts.transpile !== false) {
-    config.plugins.push(buble());
+    plugins.push(buble());
   }
-  config.plugins.push(
+
+  plugins.push(
     resolve({
       // browser: true
     }),
     commonjs()
   );
-  Object.defineProperty(config, '_name', {
-    enumerable: false,
-    value: name
-  });
+
+  const file = path.resolve(__dirname, '../dist/', 'mobile-view' + opts.file);
+  const config = {
+    input,
+    plugins,
+    output: { file, format, banner, name: 'MobileView' },
+    watch: { include: ['src/**'] },
+    onwarn(msg, warn) {
+      warn(msg);
+    }
+  };
+  Object.defineProperty(config, '_name', { enumerable: false, value: name });
 
   return config;
 }
