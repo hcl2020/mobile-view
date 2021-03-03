@@ -1,6 +1,6 @@
 /*!
- * MobileView(m-preview) v2.6.0
- * (c) 2017-2019 HeChanglin
+ * MobileView(m-preview) v2.7.0
+ * (c) 2017-2021 HeChanglin
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -627,8 +627,7 @@
 
 	var qrcode = QRCode;
 
-	var strStyle = "#mobile-view{padding-top:50px;text-align:center}\n#mobile-view-mobile{background:#333;display:inline-block;padding:3px;border-radius:20px;-webkit-box-shadow:#000 6px 6px 20px 2px;box-shadow:#666 8px 20px 26px;border:#333 1px solid}\n#mobile-view-mobile iframe{width:375px;height:734px;background:#fff;border:#000 2px solid;border-radius:17px;margin:0;padding:0;display:block}\n#mobile-view-message{position:fixed;top:0;right:0;left:0;background:rgba(204,204,204,0.5);padding:10px;color:#666;text-align:center;font-size:16px}\n#mobile-view-message a{color:#666}\n#mobile-view-qrcode{font-size: 14px;color: #999;text-align: center;position: fixed;top: 50%;right: 0;transform: translateY(-50%);background: #fff;padding: 10px;}";
-	// TODO: 浏览器兼容
+	var strStyle = 'body { margin: 0; height: 100vh; background: #f0f0f0;}a { color: #666;}#mobile-view { display: flex; height: 100%; min-height: 920px; align-items: center; justify-content: center;}#mobile-view-message { position: fixed; top: 0; right: 0; left: 0; z-index: 1; padding: 10px; color: #999; font-size: 16px; text-align: center; text-shadow: 0 0 20px #666;}#mobile-view-mobile { display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 20px; padding: 10px 0; background: #111; box-shadow: 20px 20px 60px #999, -20px -20px 60px #fff;}#mobile-view-mobile::before,#mobile-view-mobile::after { content: \'\'; position: absolute; top: 10px; bottom: 10px; overflow: hidden; z-index: 1; width: 10px; pointer-events: none;}#mobile-view-mobile::before { left: 0; background: linear-gradient(90deg, #666670, transparent);}#mobile-view-mobile::after { right: 0; background: linear-gradient(-90deg, #666670, transparent);}#mobile-view-mobile iframe { width: 375px; height: 812px; margin: 0; padding: 0; border: none; border-left: #ccc 2px solid; border-right: #666 2px solid; border-radius: 20px; background: #fff;}#mobile-view-qrcode { position: relative; overflow: hidden; margin-left: 60px; padding: 16px; border-top-left-radius: 32px; border-bottom-right-radius: 32px; background: #f0f0f0; box-shadow: inset 5px 5px 5px #ccc, inset -5px -5px 5px #fff; text-align: center;}#mobile-view-qrcode::before { content: \'\'; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: linear-gradient(   -60deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.5) 48%,   rgba(255, 255, 255, 0.5) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat; background-size: contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%);}#mobile-view-qrcode:hover::before { transform: translateX(100%);}#mobile-view-qrcode-img { display: inline-block;}#mobile-view-qrcode p { margin: 6px 0; font-size: 14px; color: #999; cursor: default;}';
 	var qrcode$1;
 	function changeQrCode(text) {
 	    console.log('MobileView: QrCode', text);
@@ -680,12 +679,7 @@
 	    if (window.innerWidth <= threshold || window.screen.width <= threshold) {
 	        return false;
 	    }
-	    var _e = navigator.userAgent, userAgent = _e === void 0 ? '' : _e;
-	    if (!userAgent.match(/chrome/i) || userAgent.match(/edge/i)) {
-	        // 暂时只支持Chrome浏览器
-	        return false;
-	    }
-	    var bodyTpl = "\n<div id=\"mobile-view\">\n  <div id=\"mobile-view-mobile\">\n    <iframe src=\"" + location.href + "\"></iframe>\n  </div>\n  <div id=\"mobile-view-message\">" + message + "</div>\n  <div id=\"mobile-view-qrcode\">\n    <div id=\"mobile-view-qrcode-img\"></div>\n    <p>" + tips + "</p>\n  </div>\n</div>\n<style>" + strStyle + "</style>";
+	    var bodyTpl = "\n<div id=\"mobile-view\">\n  <div id=\"mobile-view-message\">" + message + "</div>\n  <div id=\"mobile-view-mobile\">\n    <iframe src=\"" + location.href + "\"></iframe>\n  </div>\n  <div id=\"mobile-view-qrcode\">\n    <div id=\"mobile-view-qrcode-img\"></div>\n    <p>" + tips + "</p>\n  </div>\n</div>\n<style>" + strStyle + "</style>";
 	    // 停止网页解析和资源加载，构造body对象 (only Chrome)
 	    stopLoadNextEl();
 	    document.open();
@@ -693,15 +687,11 @@
 	    // 移除 head 中的各种 (For Chrome 36...)
 	    document.head.innerHTML = '';
 	    var $body = document.body;
-	    if ($body) {
-	        $body.innerHTML = bodyTpl;
+	    if (!$body) {
+	        $body = document.createElement('body');
+	        document.getElementsByTagName('html')[0].append($body);
 	    }
-	    else {
-	        console.warn('no body');
-	        document.open();
-	        document.write(bodyTpl);
-	        document.close();
-	    }
+	    $body.innerHTML = bodyTpl;
 	    function insertStyle(doc) {
 	        /* 处理滚动条 */
 	        var strCss = '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
@@ -750,7 +740,7 @@
 	    else {
 	        var onerror_1 = window.onerror;
 	        window.onerror = function mv_onerror(message) {
-	            console.log('MobileView: v2.6.0');
+	            console.log('MobileView: v2.7.0');
 	            window.onerror = onerror_1;
 	            return true;
 	        };
