@@ -9,7 +9,7 @@ const typescript = require('rollup-plugin-typescript');
 const input = path.resolve(__dirname, '../src/index.ts');
 const version = process.env.VERSION || require('../package.json').version;
 const getCssContent = () =>
-  fs.readFileSync(path.resolve(__dirname, '../src/index.css')).toString().replace(/\n|\r/g, '').replace(/  /g, ' ');
+  fs.readFileSync(path.resolve(__dirname, '../src/index.css')).toString().replace(/\n|\r/g, '').replace(/  /g, ' ').replace(/'/g, '\\\'');
 
 const banner =
   '/*!\n' +

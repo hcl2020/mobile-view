@@ -72,10 +72,10 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
 
   let bodyTpl = `
 <div id="mobile-view">
+  <div id="mobile-view-message">${message}</div>
   <div id="mobile-view-mobile">
     <iframe src="${location.href}"></iframe>
   </div>
-  <div id="mobile-view-message">${message}</div>
   <div id="mobile-view-qrcode">
     <div id="mobile-view-qrcode-img"></div>
     <p>${tips}</p>
