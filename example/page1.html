@@ -12,26 +12,10 @@
     <link rel="stylesheet" href="./style.css" />
     <script>
       new MobileView({ threshold: 700 });
-      console.log('%c This message should be displayed only once before reload. ', 'color: #fff;background: #06c;');
     </script>
   </head>
   <body>
-    <script>
-      /** test sync history */
-      let time = new Date();
-      let title = `${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()}`;
-      history.replaceState('', '', `?title=${title}`);
-      /** test sync document title */
-      document.title = `mobile-view: ${title}`;
-      setTimeout(() => {
-        document.title += '*';
-      }, 2000);
-      setTimeout(() => {
-        document.title += '*';
-      }, 4000);
-    </script>
-
-    <h1>mobile-view</h1>
+    <!-- <h1>mobile-view</h1> -->
 
     <header class="header">
       <a class="header__main" href="https://github.com/hcl2020" target="_blank">
@@ -42,14 +26,8 @@
 
     <main>
       <section class="block">
-        <a href="./page1.html">page1.html</a>
-        <a href="#page2">#page2</a>
-        <a href="#page3">#page3</a>
+        <a href="./index.html">index.html</a>
       </section>
-      <section class="block"></section>
-      <section class="block"></section>
-      <section class="block"></section>
-      <section class="block"></section>
     </main>
   </body>
 </html>
