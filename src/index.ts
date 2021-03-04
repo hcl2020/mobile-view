@@ -98,6 +98,8 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   }
   $body.innerHTML = bodyTpl;
 
+  changeQrCode(location.href);
+
   function insertStyle(doc) {
     let strCss =
       '* {-ms-overflow-style: -ms-autohiding-scrollbar;scrollbar-width: thin;}' +
