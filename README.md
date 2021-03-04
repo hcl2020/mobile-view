@@ -16,37 +16,41 @@
 
 For web pages designed and developed for mobile terminals (vertical screens), they are often not suitable for large screens (horizontal screens) on the desktop, and need to be specially adapted. MobileView can quickly adapt the vertical mobile page to the horizontal display of the large screen, display the preview effect of the mobile phone directly through iframe, and provide QRCode to facilitate the mobile device to open, while the address bar, QRCode and page title can keep synchronization with the original page.
 
-## Install
+## 演示 Demo
 
-    npm install mobile-view --save
+<a href="https://unpkg.com/mobile-view/example/index.html">Demo</a>
 
-## Usage
+## 安装 Install
 
-    Put the following code before all code as much as possible.
+npm install mobile-view --save
 
-### Broswer
+## 使用 Usage
 
-    <script src="dist/mobile-view.js"></script>
+尽可能将以下代码放在所有代码之前。
 
-### UMD
+Put the following code before all code as much as possible.
 
-    var MobileView = require('mobile-view');
+```html
+<script src="https://unpkg.com/mobile-view"></script>
+<script>
+  MobileView();
+</script>
+```
 
-### ES6
+```typescript
+import MobileView from 'mobile-view';
+MobileView();
+```
 
-    import MobileView from 'mobile-view';
+### 配置示例 Options Example
 
----
-
-    MobileView();
-
----
-
-    MobileView({
-        message: '建议使用手机访问此页面, 或访问此页面的<a href="#">电脑版</a>',
-        tips: '扫描二维码用手机查看~',
-        threshold: 800
-    });
+```typescript
+MobileView({
+  message: '建议使用手机访问此页面, 或访问此页面的<a href="#">电脑版</a>',
+  tips: '扫描二维码用手机查看~',
+  threshold: 800
+});
+```
 
 ## License
 
