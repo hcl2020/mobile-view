@@ -99,11 +99,13 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   $body.innerHTML = bodyTpl;
 
   function insertStyle(doc) {
-    /* 处理滚动条 */
     let strCss =
-      '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
-      '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
-      '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
+      '* {-ms-overflow-style: -ms-autohiding-scrollbar;scrollbar-width: thin;}' +
+      '::-webkit-scrollbar{width:6px;height:6px;background:transparent}' +
+      '::-webkit-scrollbar-thumb{background:rgba(128,128,128,0.5)}' +
+      '::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.5)}' +
+      '::-webkit-scrollbar-corner{display: none}';
+
     let $style = doc.createElement('style');
     $style.innerHTML = strCss;
     doc.head.appendChild($style);
