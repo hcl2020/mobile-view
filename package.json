@@ -8,9 +8,9 @@
   "jsdelivr": "dist/mobile-view.js",
   "typings": "types/index.d.ts",
   "files": [
-    "src",
     "dist/*.js",
-    "types/*.d.ts"
+    "types/*.d.ts",
+    "example/*"
   ],
   "scripts": {
     "dev": "start npm run serve && npm run dev:umd",
