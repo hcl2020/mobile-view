@@ -39,22 +39,25 @@ a {
 #mobile-view-mobile::after {
   content: '';
   position: absolute;
-  top: 10px;
-  bottom: 10px;
+  top: 0;
+  bottom: 0;
   overflow: hidden;
   z-index: 1;
-  width: 10px;
+  width: 12px;
   pointer-events: none;
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
 }
 #mobile-view-mobile::before {
   left: 0;
-  background: linear-gradient(90deg, #666670, transparent);
+  background: linear-gradient(90deg, #333, rgba(255, 255, 255, 0.5));
 }
 #mobile-view-mobile::after {
   right: 0;
-  background: linear-gradient(-90deg, #666670, transparent);
+  background: linear-gradient(-90deg, #333, rgba(255, 255, 255, 0.5));
 }
 #mobile-view-mobile iframe {
+  display: block;
   width: 375px;
   height: 812px;
   margin: 0;
