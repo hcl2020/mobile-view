@@ -1,5 +1,5 @@
 /*!
- * MobileView(m-preview) v2.7.0
+ * MobileView(m-preview) v2.9.0
  * (c) 2017-2021 HeChanglin
  * Released under the MIT License.
  */
@@ -621,7 +621,7 @@ var QRCode;
 
 var qrcode = QRCode;
 
-var strStyle = 'body { margin: 0; height: 100vh; background: #f0f0f0;}a { color: #666;}#mobile-view { display: flex; height: 100%; min-height: 920px; align-items: center; justify-content: center;}#mobile-view-message { position: fixed; top: 0; right: 0; left: 0; z-index: 1; padding: 10px; color: #999; font-size: 16px; text-align: center; text-shadow: 0 0 20px #666;}#mobile-view-mobile { display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 20px; padding: 10px 0; background: #111; box-shadow: 20px 20px 60px #999, -20px -20px 60px #fff;}#mobile-view-mobile::before,#mobile-view-mobile::after { content: \'\'; position: absolute; top: 10px; bottom: 10px; overflow: hidden; z-index: 1; width: 10px; pointer-events: none;}#mobile-view-mobile::before { left: 0; background: linear-gradient(90deg, #666670, transparent);}#mobile-view-mobile::after { right: 0; background: linear-gradient(-90deg, #666670, transparent);}#mobile-view-mobile iframe { width: 375px; height: 812px; margin: 0; padding: 0; border: none; border-left: #ccc 2px solid; border-right: #666 2px solid; border-radius: 20px; background: #fff;}#mobile-view-qrcode { position: relative; overflow: hidden; margin-left: 60px; padding: 16px; border-top-left-radius: 32px; border-bottom-right-radius: 32px; background: #f0f0f0; box-shadow: inset 5px 5px 5px #ccc, inset -5px -5px 5px #fff; text-align: center;}#mobile-view-qrcode::before { content: \'\'; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: linear-gradient(   -60deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.5) 48%,   rgba(255, 255, 255, 0.5) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat; background-size: contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%);}#mobile-view-qrcode:hover::before { transform: translateX(100%);}#mobile-view-qrcode-img { display: inline-block;}#mobile-view-qrcode p { margin: 6px 0; font-size: 14px; color: #999; cursor: default;}';
+var strStyle = 'body { margin: 0; height: 100vh; background: #f0f0f0;}a { color: #666;}#mobile-view { display: flex; height: 100%; min-height: 920px; align-items: center; justify-content: center;}#mobile-view-message { position: fixed; top: 0; right: 0; left: 0; z-index: 1; padding: 10px; color: #999; font-size: 16px; text-align: center; text-shadow: 0 0 20px #666;}#mobile-view-mobile { display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 20px; padding: 10px 0; background: #111; box-shadow: 20px 20px 60px #999, -20px -20px 60px #fff;}#mobile-view-mobile::before,#mobile-view-mobile::after { content: \'\'; position: absolute; top: 0; bottom: 0; overflow: hidden; z-index: 1; width: 12px; pointer-events: none; -webkit-filter: blur(4px); filter: blur(4px);}#mobile-view-mobile::before { left: 0; background: linear-gradient(90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile::after { right: 0; background: linear-gradient(-90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile iframe { display: block; width: 375px; height: 812px; margin: 0; padding: 0; border: none; border-left: #ccc 2px solid; border-right: #666 2px solid; border-radius: 20px; background: #fff;}#mobile-view-qrcode { position: relative; overflow: hidden; margin-left: 60px; padding: 16px; border-top-left-radius: 32px; border-bottom-right-radius: 32px; background: #f0f0f0; box-shadow: inset 5px 5px 5px #ccc, inset -5px -5px 5px #fff; text-align: center;}#mobile-view-qrcode::before { content: \'\'; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: linear-gradient(   -60deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.5) 48%,   rgba(255, 255, 255, 0.5) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat; background-size: contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%);}#mobile-view-qrcode:hover::before { transform: translateX(100%);}#mobile-view-qrcode-img { display: inline-block;}#mobile-view-qrcode p { margin: 6px 0; font-size: 14px; color: #999; cursor: default;}';
 var qrcode$1;
 function changeQrCode(text) {
     console.log('MobileView: QrCode', text);
@@ -686,11 +686,13 @@ var MobileView = function MobileView(option) {
         document.getElementsByTagName('html')[0].append($body);
     }
     $body.innerHTML = bodyTpl;
+    changeQrCode(location.href);
     function insertStyle(doc) {
-        /* 处理滚动条 */
-        var strCss = '::-webkit-scrollbar{width:6px;height:5px;background-color:rgba(0,0,0,0.05)}' +
-            '::-webkit-scrollbar-thumb{border-radius:3px;background-color:rgba(0,0,0,0.3)}' +
-            '::-webkit-scrollbar-thumb:hover{border-radius:3px;background-color:rgba(0,0,0,0.7)}';
+        var strCss = '* {-ms-overflow-style: -ms-autohiding-scrollbar;scrollbar-width: thin;}' +
+            '::-webkit-scrollbar{width:6px;height:6px;background:transparent}' +
+            '::-webkit-scrollbar-thumb{background:rgba(128,128,128,0.5)}' +
+            '::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,0.5)}' +
+            '::-webkit-scrollbar-corner{display: none}';
         var $style = doc.createElement('style');
         $style.innerHTML = strCss;
         doc.head.appendChild($style);
@@ -734,7 +736,7 @@ var MobileView = function MobileView(option) {
     else {
         var onerror_1 = window.onerror;
         window.onerror = function mv_onerror(message) {
-            console.log('MobileView: v2.7.0');
+            console.log('MobileView: v2.9.0');
             window.onerror = onerror_1;
             return true;
         };

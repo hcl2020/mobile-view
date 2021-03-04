@@ -1,11 +1,11 @@
 {
   "name": "mobile-view",
-  "version": "2.7.0",
+  "version": "2.9.0",
   "description": "A front-end tool for previewing mobile web page on a large screen.",
   "main": "dist/mobile-view.common.js",
   "module": "dist/mobile-view.esm.js",
-  "unpkg": "dist/mobile-view.js",
-  "jsdelivr": "dist/mobile-view.js",
+  "unpkg": "dist/mobile-view.min.js",
+  "jsdelivr": "dist/mobile-view.min.js",
   "typings": "types/index.d.ts",
   "files": [
     "dist/*.js",
