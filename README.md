@@ -10,11 +10,10 @@
   <a href="https://www.npmjs.com/package/mobile-view"><img src="https://img.shields.io/npm/l/mobile-view.svg" alt="License"></a>
 </p>
 
-> A front-end tool for previewing mobile web page on a large screen.
+使用 MobileView 让移动端竖屏网页快速适配大屏幕的横屏展示。提供与当前网址保持同步的二维码。支持单页和多页应用。
 
-对于专为移动端(竖屏)设计开发的网页，往往不适合在桌面端等大屏幕(横屏)展示，需要做专门的适配处理。而使用 MobileView 可以快速让竖屏移动端网页适配大屏幕的横屏展示，通过 iframe 的方式直接展示手机的预览效果，并提供二维码方便移动端设备打开，同时地址栏、二维码地址和网页标题能保持与原网页同步。
-
-For web pages designed and developed for mobile terminals (vertical screens), they are often not suitable for large screens (horizontal screens) on the desktop, and need to be specially adapted. MobileView can quickly adapt the vertical mobile page to the horizontal display of the large screen, display the preview effect of the mobile phone directly through iframe, and provide QRCode to facilitate the mobile device to open, while the address bar, QRCode and page title can keep synchronization with the original page.
+Use MobileView to quickly adapt the vertical web page of mobile to the horizontal display of large screen. Provide a QRCode of the current web address.  
+Support SPA and MPA.
 
 ## 演示 Demo
 
