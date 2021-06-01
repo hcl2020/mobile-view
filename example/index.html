@@ -28,7 +28,7 @@
     <script>
       /** test sync history */
       let time = new Date();
-      let title = `${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()}`;
+      let title = 'newTitle';
       history.replaceState('', '', `?title=${title}`);
       /** test sync document title */
       document.title = `mobile-view: ${title}`;

@@ -10,9 +10,10 @@
   <a href="https://www.npmjs.com/package/mobile-view"><img src="https://img.shields.io/npm/l/mobile-view.svg" alt="License"></a>
 </p>
 
-使用 MobileView 让移动端竖屏网页快速适配大屏幕的横屏展示。提供与当前网址保持同步的二维码。支持单页和多页应用。
+**仅需两行代码，快速实现移动端网页在 PC 端的适配**
+提供与当前网址保持同步的二维码，支持单页和多页应用。
 
-Use MobileView to quickly adapt the vertical web page of mobile to the horizontal display of large screen. Provide a QRCode of the current web address.  
+Use MobileView to quickly adapt the vertical web page of mobile to the horizontal display of large screen. Provide a QRCode of the current web address.
 Support SPA and MPA.
 
 ## 演示 Demo
