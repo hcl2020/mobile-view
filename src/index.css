@@ -26,6 +26,7 @@ a {
   text-shadow: 0 0 20px #666;
 }
 #mobile-view-mobile {
+  order: 1;
   display: inline-block;
   flex-shrink: 0;
   position: relative;
@@ -69,6 +70,7 @@ a {
   background: #fff;
 }
 #mobile-view-qrcode {
+  order: 2;
   position: relative;
   overflow: hidden;
   margin-left: 60px;
@@ -95,8 +97,7 @@ a {
       rgba(255, 255, 255, 0) 54%,
       rgba(255, 255, 255, 0) 100%
     )
-    no-repeat;
-  background-size: contain;
+    no-repeat center/contain;
   transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3);
   transform: translateX(-100%);
 }
@@ -111,4 +112,44 @@ a {
   font-size: 14px;
   color: #999;
   cursor: default;
+}
+
+#mobile-view {
+  perspective: 1366px;
+}
+#mobile-view-qrcode {
+  transition: all 1s;
+}
+#mobile-view-qrcode:hover {
+  transform: rotateX(0deg) rotateY(-12deg) rotateZ(0deg);
+}
+#mobile-view-qrcode:hover + #mobile-view-mobile {
+  transform: rotateZ(-4deg) rotateX(6deg) rotateY(24deg) scale(0.9);
+}
+#mobile-view-qrcode:hover + #mobile-view-mobile mark {
+  transform: translateX(100%);
+}
+#mobile-view-mobile {
+  transition: all 1s;
+  transform-origin: 50% 20%;
+}
+#mobile-view-mobile mark {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+      -75deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0.1) 48%,
+      rgba(255, 255, 255, 0.1) 52%,
+      rgba(255, 255, 255, 0) 54%,
+      rgba(255, 255, 255, 0) 100%
+    )
+    no-repeat center/contain;
+  transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3);
+  transform: translateX(-100%);
+  pointer-events: none;
 }
