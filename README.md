@@ -10,7 +10,8 @@
   <a href="https://www.npmjs.com/package/mobile-view"><img src="https://img.shields.io/npm/l/mobile-view.svg" alt="License"></a>
 </p>
 
-**仅需两行代码，快速实现移动端网页在 PC 端的适配**
+**仅需两行代码，快速实现移动端网页在桌面端的预览适配**
+
 提供与当前网址保持同步的二维码，支持单页和多页应用。
 
 Use MobileView to quickly adapt the vertical web page of mobile to the horizontal display of large screen. Provide a QRCode of the current web address.
@@ -18,7 +19,17 @@ Support SPA and MPA.
 
 ## 演示 Demo
 
-<a href="https://unpkg.com/mobile-view/example/index.html">Demo</a>
+<a href="https://unpkg.com/mobile-view/example/index.html">在线演示 Online Demo</a>
+
+### 使用前 Before
+
+ <!-- <img src="./example/images/pc-view.png" alt="pc-view" /> -->
+ <img src="https://unpkg.com/mobile-view/example/images/pc-view.png" alt="pc-view" />
+
+### 使用后 After
+
+ <!-- <img src="./example/images/mobile-view.png" alt="mobile-view" /> -->
+ <img src="https://unpkg.com/mobile-view/example/images/mobile-view.png" alt="mobile-view" />
 
 ## 安装 Install
 
@@ -28,7 +39,7 @@ npm install mobile-view --save
 
 尽可能将以下代码放在所有代码之前。
 
-Put the following code before all code as much as possible.
+Place the following codes before all codes whenever possible.
 
 ```html
 <script src="https://unpkg.com/mobile-view"></script>
@@ -51,6 +62,12 @@ MobileView({
   threshold: 800
 });
 ```
+
+## 注意事项
+
+MobileView 仅提供视图和路由相关功能，未进行移动端 touch 事件兼容处理。
+
+如果你需要兼容移动端 touch 事件，可以使用 [@vant/touch-emulator](https://www.npmjs.com/package/@vant/touch-emulator) 这个库将 mouse 事件模拟成对应的 touch 事件。
 
 ## License
 
