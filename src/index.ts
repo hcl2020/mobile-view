@@ -1,25 +1,20 @@
-let strStyle = '__CSS_CONTENT__';
+// @ts-ignore
+import QRCode from './libs/qrcode'; // from 'qrcode_js';
+const strStyle = '__CSS_CONTENT__';
 
-// import QRCode from 'qrcode_js';
-import QRCode from './libs/qrcode';
+let qrcode: any;
 
-let qrcode;
-
-function changeQrCode(text) {
+function changeQrCode(text: string) {
   console.log('MobileView: QrCode', text);
-  if (text.match(/^http(s)?:\/\//)) {
-    text += text.match(/\?/) ? '&' : '?';
-    text += 'from=MobileView';
-  }
-
+  text = addParam(text, 'from=MobileView');
   if (qrcode) {
     qrcode.clear(); // clear the code.
     qrcode.makeCode(text); // make another code.
   } else {
     qrcode = new QRCode(document.getElementById('mobile-view-qrcode-img'), {
       text: text,
-      width: 128,
-      height: 128,
+      width: 156,
+      height: 156,
       colorDark: '#000000',
       colorLight: '#ffffff'
       // correctLevel: QRCode.CorrectLevel.H
@@ -27,18 +22,22 @@ function changeQrCode(text) {
   }
 }
 
-function syncTitle(contentDocument, document) {
+function addParam(text: string, param: string) {
+  if (param && text.match(/^http(s)?:\/\//)) {
+    text += text.includes('?') ? '&' : '?';
+    text += param;
+  }
+  return text;
+}
+
+function syncTitle(contentDocument: Document, document: Document) {
   let $title = contentDocument.getElementsByTagName('title')[0];
   if ($title) {
     new MutationObserver(records => {
       records.forEach(record => {
         document.title = contentDocument.title;
       });
-    }).observe($title, {
-      subtree: true,
-      childList: true,
-      characterData: true
-    });
+    }).observe($title, { subtree: true, childList: true, characterData: true });
   }
 }
 
@@ -56,14 +55,16 @@ interface MobileViewOption {
   message?: string;
   threshold?: number;
   noThrowError?: boolean;
+  logo?: string;
 }
 
-let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
+const MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   let {
     tips = '扫描二维码用手机查看~',
     message = '建议使用手机访问此页面',
     threshold = 981,
-    noThrowError = false
+    noThrowError = false,
+    logo = ''
   } = option;
 
   if (window.innerWidth <= threshold || window.screen.width <= threshold) {
@@ -75,6 +76,7 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
   <div id="mobile-view-message">${message}</div>
   <div id="mobile-view-qrcode">
     <div id="mobile-view-qrcode-img"></div>
+    ${logo ? `<img id="mobile-view-qrcode-logo" src="${logo}" alt="logo" />` : ''} 
     <p>${tips}</p>
   </div>
   <div id="mobile-view-mobile">
@@ -101,7 +103,7 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
 
   changeQrCode(location.href);
 
-  function insertStyle(doc) {
+  function insertStyle(doc: Document) {
     let strCss =
       '* {-ms-overflow-style: -ms-autohiding-scrollbar;scrollbar-width: thin;}' +
       '::-webkit-scrollbar{width:6px;height:6px;background:transparent}' +
@@ -114,48 +116,50 @@ let MobileView = function MobileView(option: MobileViewOption = {}): boolean {
     doc.head.appendChild($style);
   }
 
-  function initIframe() {
-    let { contentDocument, contentWindow } = this;
-
-    if (contentDocument) {
-      insertStyle(contentDocument);
-      /* 处理地址栏 */
-      let _location = contentWindow.location;
-
-      history.replaceState(null, '', _location.href);
-      changeQrCode(_location.href);
-
-      let { replaceState, pushState } = contentWindow.history;
-      contentWindow.history.replaceState = function () {
-        replaceState.apply(this, arguments);
-        history.replaceState.apply(history, arguments);
-        changeQrCode(_location.href);
-      };
-      contentWindow.history.pushState = function () {
-        pushState.apply(this, arguments);
-        history.replaceState.apply(history, arguments);
-        changeQrCode(_location.href);
-      };
-
-      contentWindow.addEventListener('hashchange', function (event) {
-        window.location.hash = _location.hash;
-      });
-
-      contentWindow.addEventListener('popstate', function (event) {
-        changeQrCode(_location.href);
-      });
-
-      document.title = contentDocument.title;
-      syncTitle(contentDocument, document);
-    } else {
-      // 跨域外部链接
-      // TODO: 获取外部链接，生成二维码，地址栏给出提示
-    }
-  }
-
   let $iframe = document.getElementsByTagName('iframe')[0];
   if ($iframe) {
-    $iframe.onload = initIframe;
+    $iframe.onload = function initIframe() {
+      let { contentDocument, contentWindow } = $iframe;
+
+      if (contentDocument && contentWindow) {
+        insertStyle(contentDocument);
+        /* 处理地址栏 */
+        let _location = contentWindow.location;
+
+        history.replaceState(null, '', _location.href);
+        changeQrCode(_location.href);
+
+        let { replaceState, pushState } = contentWindow.history;
+        contentWindow.history.replaceState = function (
+          data: any,
+          unused: string,
+          url?: string | URL | null | undefined
+        ) {
+          replaceState.apply(this, [data, unused, url]);
+          history.replaceState.apply(history, [data, unused, url]);
+          changeQrCode(_location.href);
+        };
+        contentWindow.history.pushState = function (data: any, unused: string, url?: string | URL | null | undefined) {
+          pushState.apply(this, [data, unused, url]);
+          history.replaceState.apply(history, [data, unused, url]);
+          changeQrCode(_location.href);
+        };
+
+        contentWindow.addEventListener('hashchange', function (event) {
+          window.location.hash = _location.hash;
+        });
+
+        contentWindow.addEventListener('popstate', function (event) {
+          changeQrCode(_location.href);
+        });
+
+        document.title = contentDocument.title;
+        syncTitle(contentDocument, document);
+      } else {
+        // 跨域外部链接
+        // TODO: 获取外部链接，生成二维码，地址栏给出提示
+      }
+    };
   }
 
   if (noThrowError) {
