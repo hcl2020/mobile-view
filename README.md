@@ -59,7 +59,8 @@ MobileView();
 MobileView({
   message: '建议使用手机访问此页面, 或访问此页面的<a href="#">电脑版</a>',
   tips: '扫描二维码用手机查看~',
-  threshold: 800
+  threshold: 800,
+  logo: 'http://example.com/logo.png'
 });
 ```
 
