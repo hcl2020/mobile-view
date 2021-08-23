@@ -1,6 +1,6 @@
 {
   "name": "mobile-view",
-  "version": "2.10.1",
+  "version": "2.11.1",
   "description": "A front-end tool for previewing mobile web page on a large screen.",
   "main": "dist/mobile-view.common.js",
   "module": "dist/mobile-view.esm.js",

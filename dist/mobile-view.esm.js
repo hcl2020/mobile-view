@@ -1,5 +1,5 @@
 /*!
- * MobileView(m-preview) v2.10.1
+ * MobileView(m-preview) v2.11.1
  * (c) 2017-2021 HeChanglin
  * Released under the MIT License.
  */
@@ -93,15 +93,15 @@ var QRCode;
 	return this.modules[row][col];},getModuleCount:function(){return this.moduleCount;},make:function(){this.makeImpl(false,this.getBestMaskPattern());},makeImpl:function(test,maskPattern){this.moduleCount=this.typeNumber*4+17;this.modules=new Array(this.moduleCount);for(var row=0;row<this.moduleCount;row++){this.modules[row]=new Array(this.moduleCount);for(var col=0;col<this.moduleCount;col++){this.modules[row][col]=null;}}
 	this.setupPositionProbePattern(0,0);this.setupPositionProbePattern(this.moduleCount-7,0);this.setupPositionProbePattern(0,this.moduleCount-7);this.setupPositionAdjustPattern();this.setupTimingPattern();this.setupTypeInfo(test,maskPattern);if(this.typeNumber>=7){this.setupTypeNumber(test);}
 	if(this.dataCache==null){this.dataCache=QRCodeModel.createData(this.typeNumber,this.errorCorrectLevel,this.dataList);}
-	this.mapData(this.dataCache,maskPattern);},setupPositionProbePattern:function(row,col){for(var r=-1;r<=7;r++){if(row+r<=-1||this.moduleCount<=row+r){ continue; }for(var c=-1;c<=7;c++){if(col+c<=-1||this.moduleCount<=col+c){ continue; }if((0<=r&&r<=6&&(c==0||c==6))||(0<=c&&c<=6&&(r==0||r==6))||(2<=r&&r<=4&&2<=c&&c<=4)){this.modules[row+r][col+c]=true;}else {this.modules[row+r][col+c]=false;}}}},getBestMaskPattern:function(){var minLostPoint=0;var pattern=0;for(var i=0;i<8;i++){this.makeImpl(true,i);var lostPoint=QRUtil.getLostPoint(this);if(i==0||minLostPoint>lostPoint){minLostPoint=lostPoint;pattern=i;}}
+	this.mapData(this.dataCache,maskPattern);},setupPositionProbePattern:function(row,col){for(var r=-1;r<=7;r++){if(row+r<=-1||this.moduleCount<=row+r){ continue; }for(var c=-1;c<=7;c++){if(col+c<=-1||this.moduleCount<=col+c){ continue; }if((0<=r&&r<=6&&(c==0||c==6))||(0<=c&&c<=6&&(r==0||r==6))||(2<=r&&r<=4&&2<=c&&c<=4)){this.modules[row+r][col+c]=true;}else{this.modules[row+r][col+c]=false;}}}},getBestMaskPattern:function(){var minLostPoint=0;var pattern=0;for(var i=0;i<8;i++){this.makeImpl(true,i);var lostPoint=QRUtil.getLostPoint(this);if(i==0||minLostPoint>lostPoint){minLostPoint=lostPoint;pattern=i;}}
 	return pattern;},createMovieClip:function(target_mc,instance_name,depth){var qr_mc=target_mc.createEmptyMovieClip(instance_name,depth);var cs=1;this.make();for(var row=0;row<this.modules.length;row++){var y=row*cs;for(var col=0;col<this.modules[row].length;col++){var x=col*cs;var dark=this.modules[row][col];if(dark){qr_mc.beginFill(0,100);qr_mc.moveTo(x,y);qr_mc.lineTo(x+cs,y);qr_mc.lineTo(x+cs,y+cs);qr_mc.lineTo(x,y+cs);qr_mc.endFill();}}}
 	return qr_mc;},setupTimingPattern:function(){for(var r=8;r<this.moduleCount-8;r++){if(this.modules[r][6]!=null){continue;}
 	this.modules[r][6]=(r%2==0);}
 	for(var c=8;c<this.moduleCount-8;c++){if(this.modules[6][c]!=null){continue;}
 	this.modules[6][c]=(c%2==0);}},setupPositionAdjustPattern:function(){var pos=QRUtil.getPatternPosition(this.typeNumber);for(var i=0;i<pos.length;i++){for(var j=0;j<pos.length;j++){var row=pos[i];var col=pos[j];if(this.modules[row][col]!=null){continue;}
-	for(var r=-2;r<=2;r++){for(var c=-2;c<=2;c++){if(r==-2||r==2||c==-2||c==2||(r==0&&c==0)){this.modules[row+r][col+c]=true;}else {this.modules[row+r][col+c]=false;}}}}}},setupTypeNumber:function(test){var bits=QRUtil.getBCHTypeNumber(this.typeNumber);for(var i=0;i<18;i++){var mod=(!test&&((bits>>i)&1)==1);this.modules[Math.floor(i/3)][i%3+this.moduleCount-8-3]=mod;}
-	for(var i=0;i<18;i++){var mod=(!test&&((bits>>i)&1)==1);this.modules[i%3+this.moduleCount-8-3][Math.floor(i/3)]=mod;}},setupTypeInfo:function(test,maskPattern){var data=(this.errorCorrectLevel<<3)|maskPattern;var bits=QRUtil.getBCHTypeInfo(data);for(var i=0;i<15;i++){var mod=(!test&&((bits>>i)&1)==1);if(i<6){this.modules[i][8]=mod;}else if(i<8){this.modules[i+1][8]=mod;}else {this.modules[this.moduleCount-15+i][8]=mod;}}
-	for(var i=0;i<15;i++){var mod=(!test&&((bits>>i)&1)==1);if(i<8){this.modules[8][this.moduleCount-i-1]=mod;}else if(i<9){this.modules[8][15-i-1+1]=mod;}else {this.modules[8][15-i-1]=mod;}}
+	for(var r=-2;r<=2;r++){for(var c=-2;c<=2;c++){if(r==-2||r==2||c==-2||c==2||(r==0&&c==0)){this.modules[row+r][col+c]=true;}else{this.modules[row+r][col+c]=false;}}}}}},setupTypeNumber:function(test){var bits=QRUtil.getBCHTypeNumber(this.typeNumber);for(var i=0;i<18;i++){var mod=(!test&&((bits>>i)&1)==1);this.modules[Math.floor(i/3)][i%3+this.moduleCount-8-3]=mod;}
+	for(var i=0;i<18;i++){var mod=(!test&&((bits>>i)&1)==1);this.modules[i%3+this.moduleCount-8-3][Math.floor(i/3)]=mod;}},setupTypeInfo:function(test,maskPattern){var data=(this.errorCorrectLevel<<3)|maskPattern;var bits=QRUtil.getBCHTypeInfo(data);for(var i=0;i<15;i++){var mod=(!test&&((bits>>i)&1)==1);if(i<6){this.modules[i][8]=mod;}else if(i<8){this.modules[i+1][8]=mod;}else{this.modules[this.moduleCount-15+i][8]=mod;}}
+	for(var i=0;i<15;i++){var mod=(!test&&((bits>>i)&1)==1);if(i<8){this.modules[8][this.moduleCount-i-1]=mod;}else if(i<9){this.modules[8][15-i-1+1]=mod;}else{this.modules[8][15-i-1]=mod;}}
 	this.modules[this.moduleCount-8][8]=(!test);},mapData:function(data,maskPattern){var inc=-1;var row=this.moduleCount-1;var bitIndex=7;var byteIndex=0;for(var col=this.moduleCount-1;col>0;col-=2){if(col==6){ col--; }while(true){for(var c=0;c<2;c++){if(this.modules[row][col-c]==null){var dark=false;if(byteIndex<data.length){dark=(((data[byteIndex]>>>bitIndex)&1)==1);}
 	var mask=QRUtil.getMask(maskPattern,row,col-c);if(mask){dark=!dark;}
 	this.modules[row][col-c]=dark;bitIndex--;if(bitIndex==-1){byteIndex++;bitIndex=7;}}}
@@ -126,7 +126,7 @@ var QRCode;
 	return ((data<<10)|d)^QRUtil.G15_MASK;},getBCHTypeNumber:function(data){var d=data<<12;while(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G18)>=0){d^=(QRUtil.G18<<(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G18)));}
 	return (data<<12)|d;},getBCHDigit:function(data){var digit=0;while(data!=0){digit++;data>>>=1;}
 	return digit;},getPatternPosition:function(typeNumber){return QRUtil.PATTERN_POSITION_TABLE[typeNumber-1];},getMask:function(maskPattern,i,j){switch(maskPattern){case QRMaskPattern.PATTERN000:return (i+j)%2==0;case QRMaskPattern.PATTERN001:return i%2==0;case QRMaskPattern.PATTERN010:return j%3==0;case QRMaskPattern.PATTERN011:return (i+j)%3==0;case QRMaskPattern.PATTERN100:return (Math.floor(i/2)+Math.floor(j/3))%2==0;case QRMaskPattern.PATTERN101:return (i*j)%2+(i*j)%3==0;case QRMaskPattern.PATTERN110:return ((i*j)%2+(i*j)%3)%2==0;case QRMaskPattern.PATTERN111:return ((i*j)%3+(i+j)%2)%2==0;default:throw new Error("bad maskPattern:"+maskPattern);}},getErrorCorrectPolynomial:function(errorCorrectLength){var a=new QRPolynomial([1],0);for(var i=0;i<errorCorrectLength;i++){a=a.multiply(new QRPolynomial([1,QRMath.gexp(i)],0));}
-	return a;},getLengthInBits:function(mode,type){if(1<=type&&type<10){switch(mode){case QRMode.MODE_NUMBER:return 10;case QRMode.MODE_ALPHA_NUM:return 9;case QRMode.MODE_8BIT_BYTE:return 8;case QRMode.MODE_KANJI:return 8;default:throw new Error("mode:"+mode);}}else if(type<27){switch(mode){case QRMode.MODE_NUMBER:return 12;case QRMode.MODE_ALPHA_NUM:return 11;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 10;default:throw new Error("mode:"+mode);}}else if(type<41){switch(mode){case QRMode.MODE_NUMBER:return 14;case QRMode.MODE_ALPHA_NUM:return 13;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 12;default:throw new Error("mode:"+mode);}}else {throw new Error("type:"+type);}},getLostPoint:function(qrCode){var moduleCount=qrCode.getModuleCount();var lostPoint=0;for(var row=0;row<moduleCount;row++){for(var col=0;col<moduleCount;col++){var sameCount=0;var dark=qrCode.isDark(row,col);for(var r=-1;r<=1;r++){if(row+r<0||moduleCount<=row+r){continue;}
+	return a;},getLengthInBits:function(mode,type){if(1<=type&&type<10){switch(mode){case QRMode.MODE_NUMBER:return 10;case QRMode.MODE_ALPHA_NUM:return 9;case QRMode.MODE_8BIT_BYTE:return 8;case QRMode.MODE_KANJI:return 8;default:throw new Error("mode:"+mode);}}else if(type<27){switch(mode){case QRMode.MODE_NUMBER:return 12;case QRMode.MODE_ALPHA_NUM:return 11;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 10;default:throw new Error("mode:"+mode);}}else if(type<41){switch(mode){case QRMode.MODE_NUMBER:return 14;case QRMode.MODE_ALPHA_NUM:return 13;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 12;default:throw new Error("mode:"+mode);}}else{throw new Error("type:"+type);}},getLostPoint:function(qrCode){var moduleCount=qrCode.getModuleCount();var lostPoint=0;for(var row=0;row<moduleCount;row++){for(var col=0;col<moduleCount;col++){var sameCount=0;var dark=qrCode.isDark(row,col);for(var r=-1;r<=1;r++){if(row+r<0||moduleCount<=row+r){continue;}
 	for(var c=-1;c<=1;c++){if(col+c<0||moduleCount<=col+c){continue;}
 	if(r==0&&c==0){continue;}
 	if(dark==qrCode.isDark(row+r,col+c)){sameCount++;}}}
@@ -621,14 +621,12 @@ var QRCode;
 
 var qrcode = QRCode;
 
-var strStyle = 'body { margin: 0; height: 100vh; background: #f0f0f0;}a { color: #666;}#mobile-view { display: flex; height: 100%; min-height: 920px; align-items: center; justify-content: center;}#mobile-view-message { position: fixed; top: 0; right: 0; left: 0; z-index: 1; padding: 10px; color: #999; font-size: 16px; text-align: center; text-shadow: 0 0 20px #666;}#mobile-view-mobile { order: 1; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 20px; padding: 10px 0; background: #111; box-shadow: 20px 20px 60px #999, -20px -20px 60px #fff;}#mobile-view-mobile::before,#mobile-view-mobile::after { content: \'\'; position: absolute; top: 0; bottom: 0; overflow: hidden; z-index: 1; width: 12px; pointer-events: none; -webkit-filter: blur(4px); filter: blur(4px);}#mobile-view-mobile::before { left: 0; background: linear-gradient(90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile::after { right: 0; background: linear-gradient(-90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile iframe { display: block; width: 375px; height: 812px; margin: 0; padding: 0; border: none; border-left: #ccc 2px solid; border-right: #666 2px solid; border-radius: 20px; background: #fff;}#mobile-view-qrcode { order: 2; position: relative; overflow: hidden; margin-left: 60px; padding: 16px; border-top-left-radius: 32px; border-bottom-right-radius: 32px; background: #f0f0f0; box-shadow: inset 5px 5px 5px #ccc, inset -5px -5px 5px #fff; text-align: center;}#mobile-view-qrcode::before { content: \'\'; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: linear-gradient(   -60deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.5) 48%,   rgba(255, 255, 255, 0.5) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat center/contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%);}#mobile-view-qrcode:hover::before { transform: translateX(100%);}#mobile-view-qrcode-img { display: inline-block;}#mobile-view-qrcode p { margin: 6px 0; font-size: 14px; color: #999; cursor: default;}#mobile-view { perspective: 1366px;}#mobile-view-qrcode { transition: all 1s;}#mobile-view-qrcode:hover { transform: rotateX(0deg) rotateY(-12deg) rotateZ(0deg);}#mobile-view-qrcode:hover + #mobile-view-mobile { transform: rotateZ(-4deg) rotateX(6deg) rotateY(24deg) scale(0.9);}#mobile-view-qrcode:hover + #mobile-view-mobile mark { transform: translateX(100%);}#mobile-view-mobile { transition: all 1s; transform-origin: 50% 20%;}#mobile-view-mobile mark { position: absolute; right: 0; left: 0; top: 0; bottom: 0; background: linear-gradient(   -75deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.1) 48%,   rgba(255, 255, 255, 0.1) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat center/contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%); pointer-events: none;}';
+// @ts-ignore
+var strStyle = 'body { margin: 0; height: 100vh; background: #f0f0f0;}a { color: #666;}#mobile-view { display: flex; height: 100%; min-height: 920px; align-items: center; justify-content: center;}#mobile-view-message { position: fixed; top: 0; right: 0; left: 0; z-index: 1; padding: 10px; color: #999; font-size: 16px; text-align: center; text-shadow: 0 0 20px #666;}#mobile-view-mobile { order: 1; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 20px; padding: 10px 0; background: #111; box-shadow: 20px 20px 60px #999, -20px -20px 60px #fff;}#mobile-view-mobile::before,#mobile-view-mobile::after { content: \'\'; position: absolute; top: 0; bottom: 0; overflow: hidden; z-index: 1; width: 12px; pointer-events: none; -webkit-filter: blur(4px); filter: blur(4px);}#mobile-view-mobile::before { left: 0; background: linear-gradient(90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile::after { right: 0; background: linear-gradient(-90deg, #333, rgba(255, 255, 255, 0.5));}#mobile-view-mobile iframe { display: block; width: 375px; height: 812px; margin: 0; padding: 0; border: none; border-left: #ccc 2px solid; border-right: #666 2px solid; border-radius: 20px; background: #fff;}#mobile-view-qrcode { order: 2; flex-shrink: 0; position: relative; overflow: hidden; margin-left: 60px; padding: 24px 16px; border-radius: 24px 0 24px 0; background: #f0f0f0; box-shadow: inset 5px 5px 5px #ccc, inset -5px -5px 5px #fff; text-align: center;}#mobile-view-qrcode::before { content: \'\'; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: linear-gradient(   -60deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.5) 48%,   rgba(255, 255, 255, 0.5) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat center/contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%);}#mobile-view-qrcode:hover::before { transform: translateX(100%);}#mobile-view-qrcode-img { display: block; margin: 0 auto; width: 156px;}#mobile-view-qrcode-logo { position: absolute; width: 36px; height: 36px; top: 84px; left: calc(50% - 18px); border: 4px #fff solid; border-radius: 12px; background: #fff;}#mobile-view-qrcode p { max-width: 156px; margin: 6px 0 0; font-size: 14px; color: #999; cursor: default;}#mobile-view { perspective: 1366px;}#mobile-view-qrcode { transition: all 1s;}#mobile-view-qrcode:hover { transform: rotateX(0deg) rotateY(-12deg) rotateZ(0deg);}#mobile-view-qrcode:hover + #mobile-view-mobile { transform: rotateZ(-4deg) rotateX(6deg) rotateY(24deg) scale(0.9);}#mobile-view-qrcode:hover + #mobile-view-mobile mark { transform: translateX(100%);}#mobile-view-mobile { transition: all 1s; transform-origin: 50% 20%;}#mobile-view-mobile mark { position: absolute; right: 0; left: 0; top: 0; bottom: 0; background: linear-gradient(   -75deg,   rgba(255, 255, 255, 0) 0,   rgba(255, 255, 255, 0) 46%,   rgba(255, 255, 255, 0.1) 48%,   rgba(255, 255, 255, 0.1) 52%,   rgba(255, 255, 255, 0) 54%,   rgba(255, 255, 255, 0) 100%  )  no-repeat center/contain; transition: 0.5s all cubic-bezier(0.7, 0.3, 0.7, 0.3); transform: translateX(-100%); pointer-events: none;}';
 var qrcode$1;
 function changeQrCode(text) {
     console.log('MobileView: QrCode', text);
-    if (text.match(/^http(s)?:\/\//)) {
-        text += text.match(/\?/) ? '&' : '?';
-        text += 'from=MobileView';
-    }
+    text = addParam(text, 'from=MobileView');
     if (qrcode$1) {
         qrcode$1.clear(); // clear the code.
         qrcode$1.makeCode(text); // make another code.
@@ -636,13 +634,20 @@ function changeQrCode(text) {
     else {
         qrcode$1 = new qrcode(document.getElementById('mobile-view-qrcode-img'), {
             text: text,
-            width: 128,
-            height: 128,
+            width: 156,
+            height: 156,
             colorDark: '#000000',
             colorLight: '#ffffff'
             // correctLevel: QRCode.CorrectLevel.H
         });
     }
+}
+function addParam(text, param) {
+    if (param && text.match(/^http(s)?:\/\//)) {
+        text += text.includes('?') ? '&' : '?';
+        text += param;
+    }
+    return text;
 }
 function syncTitle(contentDocument, document) {
     var $title = contentDocument.getElementsByTagName('title')[0];
@@ -651,11 +656,7 @@ function syncTitle(contentDocument, document) {
             records.forEach(function (record) {
                 document.title = contentDocument.title;
             });
-        }).observe($title, {
-            subtree: true,
-            childList: true,
-            characterData: true
-        });
+        }).observe($title, { subtree: true, childList: true, characterData: true });
     }
 }
 function stopLoadNextEl() {
@@ -669,11 +670,11 @@ function stopLoadNextEl() {
 }
 var MobileView = function MobileView(option) {
     if (option === void 0) { option = {}; }
-    var _a = option.tips, tips = _a === void 0 ? '扫描二维码用手机查看~' : _a, _b = option.message, message = _b === void 0 ? '建议使用手机访问此页面' : _b, _c = option.threshold, threshold = _c === void 0 ? 981 : _c, _d = option.noThrowError, noThrowError = _d === void 0 ? false : _d;
+    var _a = option.tips, tips = _a === void 0 ? '扫描二维码用手机查看~' : _a, _b = option.message, message = _b === void 0 ? '建议使用手机访问此页面' : _b, _c = option.threshold, threshold = _c === void 0 ? 981 : _c, _d = option.noThrowError, noThrowError = _d === void 0 ? false : _d, _e = option.logo, logo = _e === void 0 ? '' : _e;
     if (window.innerWidth <= threshold || window.screen.width <= threshold) {
         return false;
     }
-    var bodyTpl = "\n<div id=\"mobile-view\">\n  <div id=\"mobile-view-message\">" + message + "</div>\n  <div id=\"mobile-view-qrcode\">\n    <div id=\"mobile-view-qrcode-img\"></div>\n    <p>" + tips + "</p>\n  </div>\n  <div id=\"mobile-view-mobile\">\n    <mark></mark>\n    <iframe src=\"" + location.href + "\"></iframe>\n  </div>\n</div>\n<style>" + strStyle + "</style>";
+    var bodyTpl = "\n<div id=\"mobile-view\">\n  <div id=\"mobile-view-message\">" + message + "</div>\n  <div id=\"mobile-view-qrcode\">\n    <div id=\"mobile-view-qrcode-img\"></div>\n    " + (logo ? "<img id=\"mobile-view-qrcode-logo\" src=\"" + logo + "\" alt=\"logo\" />" : '') + " \n    <p>" + tips + "</p>\n  </div>\n  <div id=\"mobile-view-mobile\">\n    <mark></mark>\n    <iframe src=\"" + location.href + "\"></iframe>\n  </div>\n</div>\n<style>" + strStyle + "</style>";
     // 停止网页解析和资源加载，构造body对象 (only Chrome)
     stopLoadNextEl();
     document.open();
@@ -697,38 +698,37 @@ var MobileView = function MobileView(option) {
         $style.innerHTML = strCss;
         doc.head.appendChild($style);
     }
-    function initIframe() {
-        var _a = this, contentDocument = _a.contentDocument, contentWindow = _a.contentWindow;
-        if (contentDocument) {
-            insertStyle(contentDocument);
-            /* 处理地址栏 */
-            var _location_1 = contentWindow.location;
-            history.replaceState(null, '', _location_1.href);
-            changeQrCode(_location_1.href);
-            var _b = contentWindow.history, replaceState_1 = _b.replaceState, pushState_1 = _b.pushState;
-            contentWindow.history.replaceState = function () {
-                replaceState_1.apply(this, arguments);
-                history.replaceState.apply(history, arguments);
-                changeQrCode(_location_1.href);
-            };
-            contentWindow.history.pushState = function () {
-                pushState_1.apply(this, arguments);
-                history.replaceState.apply(history, arguments);
-                changeQrCode(_location_1.href);
-            };
-            contentWindow.addEventListener('hashchange', function (event) {
-                window.location.hash = _location_1.hash;
-            });
-            contentWindow.addEventListener('popstate', function (event) {
-                changeQrCode(_location_1.href);
-            });
-            document.title = contentDocument.title;
-            syncTitle(contentDocument, document);
-        }
-    }
     var $iframe = document.getElementsByTagName('iframe')[0];
     if ($iframe) {
-        $iframe.onload = initIframe;
+        $iframe.onload = function initIframe() {
+            var contentDocument = $iframe.contentDocument, contentWindow = $iframe.contentWindow;
+            if (contentDocument && contentWindow) {
+                insertStyle(contentDocument);
+                /* 处理地址栏 */
+                var _location_1 = contentWindow.location;
+                history.replaceState(null, '', _location_1.href);
+                changeQrCode(_location_1.href);
+                var _a = contentWindow.history, replaceState_1 = _a.replaceState, pushState_1 = _a.pushState;
+                contentWindow.history.replaceState = function (data, unused, url) {
+                    replaceState_1.apply(this, [data, unused, url]);
+                    history.replaceState.apply(history, [data, unused, url]);
+                    changeQrCode(_location_1.href);
+                };
+                contentWindow.history.pushState = function (data, unused, url) {
+                    pushState_1.apply(this, [data, unused, url]);
+                    history.replaceState.apply(history, [data, unused, url]);
+                    changeQrCode(_location_1.href);
+                };
+                contentWindow.addEventListener('hashchange', function (event) {
+                    window.location.hash = _location_1.hash;
+                });
+                contentWindow.addEventListener('popstate', function (event) {
+                    changeQrCode(_location_1.href);
+                });
+                document.title = contentDocument.title;
+                syncTitle(contentDocument, document);
+            }
+        };
     }
     if (noThrowError) {
         return true;
@@ -736,7 +736,7 @@ var MobileView = function MobileView(option) {
     else {
         var onerror_1 = window.onerror;
         window.onerror = function mv_onerror(message) {
-            console.log('MobileView: v2.10.1');
+            console.log('MobileView: v2.11.1');
             window.onerror = onerror_1;
             return true;
         };

@@ -3,6 +3,7 @@ declare function MobileView(option?: {
   message?: string;
   threshold?: number;
   noThrowError?: boolean;
+  logo?: string;
 }): boolean;
 
 export default MobileView;
